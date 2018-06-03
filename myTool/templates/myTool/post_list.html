@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Like Post App</title>
+</head>
+<body>
+    <p id="message"></p>
+    <p id="message_1"></p>
+    <div id="message_2"></div>
+    <!-- {% for post in posts %} -->
+    <!-- <h3>{{ forloop.counter }}) {{ post.post_heading }}</h3> -->
+    <!-- <p>{{ post.post_text }} </p> -->
+    <!-- <a class="likebutton" id="like{{post.id}}" href="#" data-catid="{{ post.id }}">Like</a> -->
+    <!-- {% endfor %} -->
+    <input type="text" id="entered_url">
+    <input type="text" id="entered_tag" hidden>
+    <input type="submit" id="button_1">
+    <input type="submit" id="button_2" hidden>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript">
+    $('#button_1').click(function(){
+        // alert('aazim')
+    var catid;
+    catid = $('#entered_url').val()
+    $.ajax(
+    {
+        type:"GET",
+        url: "/likepost",
+        data:{
+                 post_id: catid
+        },
+        success: function( data ) 
+        {
+            $('#message').text(data['name']);
+            $('#message_1').text(data['tags']);
+            $("#entered_tag").show();
+            $("#button_1").hide();
+            $("#button_2").show();
+        }
+     })
+});
+    $('#button_2').click(function(){
+        // alert('aazim')
+    var catid;
+    catid = $('#entered_url').val()
+    tagid = $('#entered_tag').val()
+    $.ajax(
+    {
+        type:"GET",
+        url: "/likepost",
+        data:{
+                 url_input: catid,
+                 tag_id: tagid
+        },
+        success: function( data ) 
+        {
+            alert(data['html_data'].length)
+            var i;
+            $('#message_2').empty()
+            for (i = 0; i < data['html_data'].length; i++) { 
+                // text += cars[i] + "<br>";
+                "<p>Text.</p>"
+                $('#message_2').append("<p>"+data['html_data'][i]+"</p>")
+                // $('#message_2').text(data['html_data'][i]);
+}
+        }
+     })
+});
+</script>
+</body>
+</html>

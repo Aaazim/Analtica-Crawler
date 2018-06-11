@@ -3,9 +3,11 @@
 <head>
     <title>Like Post App</title>
 </head>
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
 <body>
     <p id="message"></p>
     <p id="message_1"></p>
+    <p id="ids"></p>
     <div id="message_2"></div>
     <!-- {% for post in posts %} -->
     <!-- <h3>{{ forloop.counter }}) {{ post.post_heading }}</h3> -->
@@ -16,9 +18,11 @@
     <input type="text" id="entered_tag" hidden>
     <input type="submit" id="button_1">
     <input type="submit" id="button_2" hidden>
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
 
+    
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script type="text/javascript">
     $('#button_1').click(function(){
         // alert('aazim')
@@ -34,7 +38,8 @@
         success: function( data ) 
         {
             $('#message').text(data['name']);
-            $('#message_1').text(data['tags']);
+            $('#message_1').text("classes: ---" + data['tags']);
+            $('#ids').text("id: ---" + data['ids']);
             $("#entered_tag").show();
             $("#button_1").hide();
             $("#button_2").show();
@@ -58,16 +63,35 @@
         {
             alert(data['html_data'].length)
             var i;
-            $('#message_2').empty()
+
+            $('#example tbody tr').empty()
+            var myTable = $('#example').DataTable();
+            //      myTable.row.add( [
+            //     "aazim"
+            // ] ).draw();
             for (i = 0; i < data['html_data'].length; i++) { 
                 // text += cars[i] + "<br>";
-                "<p>Text.</p>"
-                $('#message_2').append("<p>"+data['html_data'][i]+"</p>")
+                // "<p>Text.</p>"
+                myTable.row.add([data['html_data'][i]]);
+                // $('#message_2').append("<p>"+data['html_data'][i]+"</p>")
+                // $('#example tbody').append("<tr role='row' class='odd'><td class='sorting_1'>"+data['html_data'][i]+"</td></tr>")
                 // $('#message_2').text(data['html_data'][i]);
-}
+            }
+            myTable.draw();
+
         }
      })
 });
 </script>
+        <table id="example">
+            <thead>
+              <tr><th>Sites</th></tr>
+            </thead>
+            <tbody>
+              <!-- <tr><td>SitePoint</td></tr>
+              <tr><td>Learnable</td></tr>
+              <tr><td>Flippa</td></tr> -->
+            </tbody>
+      </table>
 </body>
 </html>

@@ -13,6 +13,11 @@ import requests
 import json
 import re
 from django.core import serializers
+import nltk
+import sys
+from nltk.classify import NaiveBayesClassifier
+reload(sys)
+sys.setdefaultencoding("utf-8")
 # from basicapp.models import QueryForm
 
 
@@ -27,7 +32,7 @@ def likePost(request):
 			post_id = request.GET['post_id']
 			# print '------------------------------',post_id
 			likedpost = get_html_tags(str(post_id)) #getting the liked posts
-			return HttpResponse(json.dumps({'url':post_id,'tags':likedpost}), content_type="application/json")
+			return HttpResponse(json.dumps({'url':post_id,'tags':likedpost[0], "ids":likedpost[-1]}), content_type="application/json")
 		elif request.GET.has_key('url_input'):
 			post_id_1 = request.GET['url_input']
 			tag_id = request.GET['tag_id']
@@ -40,10 +45,13 @@ def likePost(request):
 def get_html_tags(url):
 	page = requests.get(url)
 	soup = BeautifulSoup(page.content,'html.parser')
-	tags = list(set([tag.name for tag in soup.find_all()]))
+	classes = list(set([value for element in soup.find_all(class_=True) for value in element["class"]]))
+	ids = list(set([value for element in soup.find_all(True, {"id":True})]))
+	# tags = list(set([tag.name for tag in soup.find_all()]))
 	print '-----------------------------------------------------'
+	print ids
 	# print list(soup(text=re.compile('Technicolor')))
-	return tags
+	return classes
 
 def get_selected_tag_data(url,tag):
 	page = requests.get(url)
@@ -53,3 +61,5 @@ def get_selected_tag_data(url,tag):
 	return list(soup(text=re.compile(tag)))
 	# print soup(text=re.compile('exact text'))
 
+def format_sentence(sent):
+    return({word: True for word in nltk.word_tokenize(sent)})

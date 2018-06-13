@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Like Post App</title>
+    <title>Build your Data</title>
 </head>
-    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <body>
     <p id="message"></p>
     <p id="message_1"></p>
     <p id="ids"></p>
     <div id="message_2"></div>
-    <!-- {% for post in posts %} -->
-    <!-- <h3>{{ forloop.counter }}) {{ post.post_heading }}</h3> -->
-    <!-- <p>{{ post.post_text }} </p> -->
-    <!-- <a class="likebutton" id="like{{post.id}}" href="#" data-catid="{{ post.id }}">Like</a> -->
-    <!-- {% endfor %} -->
     <input type="text" id="entered_url">
     <input type="text" id="entered_tag" hidden>
     <input type="submit" id="button_1">
     <input type="submit" id="button_2" hidden>
+    <input type="submit" id="button_check" >
     <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
   <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
 
     
@@ -61,7 +58,7 @@
         },
         success: function( data ) 
         {
-            alert(data['html_data'].length)
+            // alert(data['html_data'].length)
             var i;
 
             $('#example tbody tr').empty()
@@ -83,7 +80,29 @@
      })
 });
 </script>
-        <table id="example">
+<script>
+$(document).ready(function() {
+    var table = $('#example').DataTable();
+    // alert("aazim")
+    var selected_rows = []
+    $('#example tbody').on( 'click', 'tr', function () {
+        $(this).toggleClass('selected');
+        var something = $(this).closest('tr').children('td.sorting_1').text();
+        // alert(something);
+        // selected_rows.push(something)
+    } );
+ 
+    $('#button_check').click( function () {
+        // alert(table.rows('.selected').data())
+        data_ext = table.rows('.selected').data()
+        $.each(data_ext, function( index, value ) {
+          alert( index + ": " + value );
+        });
+        // alert( table.rows('.selected').data().length +' row(s) selected' );
+    } );
+} );
+</script>
+        <table id="example" class="display">
             <thead>
               <tr><th>Sites</th></tr>
             </thead>
